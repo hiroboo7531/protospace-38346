@@ -1,0 +1,19 @@
+<div class="card">
+  <%= link_to image_tag(prototype.image, class: :card__img ), prototype_path(prototype.id)%>
+  <%# image_tagメソッド img要素を生成するヘルパー %>
+  <%# image_tag(画像ファイルへのパス, オプション={}, HTML属性={} or イベント属性={}) %>
+  <%# コントローラーでデータベースを使うときのmodelが大文字 %>
+  <%# image_tagはモデルは関係ない %>
+  <%# prototype.imageのprototypeは＠prototypesの中の一つの情報という認識 %>
+
+  <div class="card__body">
+    <%= link_to prototype.title, prototype_path(prototype.id), class: :card__title%>
+   <%# link_to "そこに表示する文字", リンク先の_path,オプション %>
+
+    <p class="card__summary">
+      <%= prototype.catch_copy %>
+    </p>
+    <%= link_to "by #{prototype.user.name}", user_path(prototype.user), class: :card__user %>
+  </div>
+  <%# コレクションオプションを使うとインスタンス変数は使わない %>
+</div>

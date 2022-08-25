@@ -1,0 +1,27 @@
+<main class="main">
+  <div class="inner">
+    <%# ログインしているときは以下を表示する %> 
+      <% if user_signed_in? %>
+      <div class="greeting">
+        こんにちは、
+        <%= link_to "#{current_user.name}さん", user_path(current_user), class: :greeting__link %>
+        <%# current_userはログインしている人のレコード情報を持っていると考えて良い %>
+        <%# example current_user.emailにすればemailが出力される%>
+
+        <%# pathのところ：なぜuser_pathじゃダメなの？ %>
+        <%# エラー文が現れたNo route matches {:action=>"show", :controller=>"users"}, missing required keys: [:id] %>
+        <%# たぶんどのユーザーの詳細情報を出したいか分からんから指定を要求しているんだと思う %>
+        <%#  current_userのところをid:current_userにしても:current_user、current_user.idでも動いた%>
+        <%# [params:current_user]や@current_userだと動かない %>
+        <%# パラムスはリクエストに乗ってる情報のことcurrent_user既にある情報のこと、
+        ストロングパラムスみたいにカレントユーザIDを紐づけないといけないような場合とはこれ違う %>
+      </div> 
+      <% end %>
+      <%# // ログインしているときは上記を表示%>
+    <div class="card__wrapper">
+      <%= render partial: "prototype" , collection: @prototypes%>
+      <%# 投稿機能実装後、部分テンプレートでプロトタイプ投稿一覧を表示する %>
+      <%# partial以下の””の中の記述を使うことで部分テンプレートないでインスタンス変数として使う事ができる %>
+    </div>
+  </div>
+</main>

@@ -1,0 +1,73 @@
+<main class="main">
+  <div class="inner">
+    <div class="prototype__wrapper">
+      <p class="prototype__hedding">
+        <%= @prototype.title%>
+      </p>
+      <%= link_to "by#{@prototype.user.name}", user_path(@prototype.user), class: :prototype__user %>
+      <%# インスタンス変数.userモデル.nameカラム。belong_toでprototypeとuserは繋がっているのでこの書き方でいける %>
+      <%# プロトタイプの投稿者とログインしているユーザーが同じであれば以下を表示する %>
+        <% if user_signed_in? && current_user.id == @prototype.user_id %>
+        <%# ifユーザーはログインしていますか？  と 現在のユーザーと投稿ユーザーidは一致していますか？ %>
+          <div class="prototype__manage">
+            <%= link_to "編集する", edit_prototype_path, class: :prototype__btn %>
+            <%= link_to "削除する", prototype_path, class: :prototype__btn, method: :delete %>
+          </div>
+        <% end %>
+      <%# // プロトタイプの投稿者とログインしているユーザーが同じであれば上記を表示する %>
+      <div class="prototype__image">
+        <%= image_tag @prototype.image %>
+        <%# コントローラーからインスタンス変数を持ってきてインスタンス変数のカラムを指定してあげる %>
+      </div>
+      <div class="prototype__body">
+        <div class="prototype__detail">
+          <p class="detail__title">キャッチコピー</p>
+          <p class="detail__message">
+            <%= @prototype.catch_copy %>
+          </p>
+        </div>
+        <div class="prototype__detail">
+          <p class="detail__title">コンセプト</p>
+          <p class="detail__message">
+            <%= @prototype.concept %>
+          </p>
+        </div>
+      </div>
+      <div class="prototype__comments">
+        <%# ログインしているユーザーには以下のコメント投稿フォームを表示する %>
+        <% if user_signed_in? %>
+           <%= form_with(model: [@prototype, @comment],local: true) do |f| %>
+           <%# form_withの後のカッコにスペース入れるな！たぶんモデルオプションを２つにして各カッコを使うときカッコで括らないといけない %>
+            <div class="field">
+               <%= f.label :comment, "コメント" %><br />
+               <%# 上の記述だと:の後の記載がパラメーター %>
+               <%= f.text_field :comment, id:"comment_content" %>
+            </div>
+            <div class="actions">
+              <%= f.submit "送信する", class: :form__btn  %>
+            </div>
+           <% end %>
+        <%# // ログインしているユーザーには上記を表示する %>
+        <% end %>
+        <ul class="comments_lists">
+          <%# 投稿に紐づくコメントを一覧する処理を記述する %>
+           <h4>＜コメント一覧＞</h4>
+           <% @comments.each do |comment| %>
+            <li class="comments_list">
+               <%= comment.comment%> 
+               <%# comemntのブロック変数とcommentカラムのコンボ 
+このブロック変数はコメンツインスタンス変数＝表示されているプロトタイプのアソシエ関係のhas_manyコメントに紐づく全てのユーザー情報 %>
+               <%= link_to "by #{comment.user.name}", user_path(comment.user), class: :comment_user %> 
+               <%# ブロック変数のcommentにuserモデルのアソシエ関係の中のnameカラム %>
+               <%# user_pathのところはブロック変数のcommentでも@commentsのインスタ変数でもいける。@commentだとComment.newの空の場所を用意されてるだけ %>
+               <%# 『『『『『上のコメントアウトは間違い！！！インスタンス変数は無理！コメントがない場合表示されるけどコメントがあると弾かれる！』』』』』 %>
+               <%# commentブロック変数でないとeachが発動しないから %>
+            </li>
+           <%end%>
+          <%# // 投稿に紐づくコメントを一覧する処理を記述する %>
+        </ul>
+      </div>
+    </div>
+  </div>
+</main>
+
