@@ -10,8 +10,10 @@
         <% if user_signed_in? && current_user.id == @prototype.user_id %>
         <%# ifユーザーはログインしていますか？  と 現在のユーザーと投稿ユーザーidは一致していますか？ %>
           <div class="prototype__manage">
-            <%= link_to "編集する", edit_prototype_path, class: :prototype__btn %>
-            <%= link_to "削除する", prototype_path, class: :prototype__btn, method: :delete %>
+            <%= link_to "編集する", edit_prototype_path(@prototype), class: :prototype__btn %>
+            <%# コントローラーで設定している下の記述がプロトタイプのid。これをパスに指定してあげないと %>
+            <%# @prototype = Prototype.find(params[:id]) %>
+            <%= link_to "削除する", prototype_path(@prototype), class: :prototype__btn, method: :delete %>
           </div>
         <% end %>
       <%# // プロトタイプの投稿者とログインしているユーザーが同じであれば上記を表示する %>
